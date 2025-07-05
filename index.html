@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Roblox Account Creator</title>
+  <style>
+    body { font-family: sans-serif; margin: 3em; }
+    input, button { padding: 0.5em; font-size: 1em; margin: 0.5em 0; }
+  </style>
+</head>
+<body>
+  <h1>Roblox Account Creator</h1>
+  <form id="signup-form">
+    <label>
+      Username: <input type="text" name="username" required/>
+    </label><br/>
+    <label>
+      Password: <input type="password" name="password" required/>
+    </label><br/>
+    <button type="submit">Create Account</button>
+  </form>
+  <pre id="output"></pre>
+
+  <script>
+    const form = document.getElementById('signup-form');
+    const output = document.getElementById('output');
+    form.onsubmit = async e => {
+      e.preventDefault();
+      output.textContent = 'Creating account...';
+      const formData = new FormData(form);
+      const res = await fetch('/api/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: formData.get('username'),
+          password: formData.get('password'),
+        })
+      });
+      const data = await res.json();
+      output.textContent = JSON.stringify(data, null, 2);
+    };
+  </script>
+</body>
+</html>
